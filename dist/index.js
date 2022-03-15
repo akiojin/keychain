@@ -1378,7 +1378,7 @@ class KeychainSecurity {
     static FindGenericPassword(service) {
         return exec.exec('security', ['find-generic-password', '-s', `"${service}"`]);
     }
-    static ShowCodeSignings(keychain) {
+    static ShowCodeSigning(keychain) {
         return exec.exec('security', ['find-identity', '-p', 'codesigning', '-v', keychain]);
     }
 }

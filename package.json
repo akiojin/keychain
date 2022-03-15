@@ -1,5 +1,5 @@
 {
-  "name": "@akiojin/keychain-security",
+  "name": "@akiojin/keychain",
   "version": "0.1.1",
   "description": "This package manipulates the keychain using the security command.",
   "main": "dist/index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/akiojin/keychain-security.git"
+    "url": "git+https://github.com/akiojin/keychain.git"
   },
   "keywords": [
     "keychain",
@@ -18,9 +18,9 @@
   "author": "akiojin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/akiojin/keychain-security/issues"
+    "url": "https://github.com/akiojin/keychain/issues"
   },
-  "homepage": "https://github.com/akiojin/keychain-security#readme",
+  "homepage": "https://github.com/akiojin/keychain#readme",
   "dependencies": {
     "@actions/exec": "^1.1.0",
     "typescript": "^4.6.2"

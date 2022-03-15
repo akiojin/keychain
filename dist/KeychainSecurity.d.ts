@@ -17,5 +17,5 @@ export default class KeychainSecurity {
     static SetListKeychains(keychains: string[]): Promise<number>;
     static AllowAccessForAppleTools(keychain: string, password: string): Promise<number>;
     static FindGenericPassword(service: string): Promise<number>;
-    static ShowCodeSignings(keychain: string): Promise<number>;
+    static ShowCodeSigning(keychain: string): Promise<number>;
 }
