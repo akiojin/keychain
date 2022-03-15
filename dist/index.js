@@ -1265,7 +1265,7 @@ function copyFile(srcFile, destFile, force) {
 
 /***/ }),
 
-/***/ 515:
+/***/ 577:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 
@@ -1294,7 +1294,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const exec = __importStar(__nccwpck_require__(49));
-class KeychainSecurity {
+class Keychain {
     static ImportCertificateFromFile(keychain, certificate, passphrase) {
         const args = [
             'import', certificate,
@@ -1382,7 +1382,7 @@ class KeychainSecurity {
         return exec.exec('security', ['find-identity', '-p', 'codesigning', '-v', keychain]);
     }
 }
-exports["default"] = KeychainSecurity;
+exports["default"] = Keychain;
 
 
 /***/ }),
@@ -1395,9 +1395,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.KeychainSecurity = void 0;
-var KeychainSecurity_1 = __nccwpck_require__(515);
-Object.defineProperty(exports, "KeychainSecurity", ({ enumerable: true, get: function () { return __importDefault(KeychainSecurity_1).default; } }));
+exports.Keychain = void 0;
+var Keychain_1 = __nccwpck_require__(577);
+Object.defineProperty(exports, "Keychain", ({ enumerable: true, get: function () { return __importDefault(Keychain_1).default; } }));
 
 
 /***/ }),

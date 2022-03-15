@@ -1,1 +1,1 @@
-export { default as KeychainSecurity } from './KeychainSecurity';
+export { default as Keychain } from './Keychain';

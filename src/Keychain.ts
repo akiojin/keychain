@@ -1,6 +1,6 @@
 import * as exec from '@actions/exec'
 
-export default class KeychainSecurity
+export default class Keychain
 {
 	static ImportCertificateFromFile(keychain: string, certificate: string, passphrase: string): Promise<number>
 	{
