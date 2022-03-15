@@ -1,6 +1,6 @@
 {
   "name": "@akiojin/keychain",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "This package manipulates the keychain using the security command.",
   "main": "dist/index.js",
   "private": false,
