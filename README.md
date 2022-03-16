@@ -1,5 +1,5 @@
 # keychain-security
-このパッケージは security コマンドを利用してキーチェインを操作します。
+This package uses the security command to manipulate the keychain.
 
 ## Usage
 ```js
