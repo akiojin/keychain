@@ -2,6 +2,16 @@ import * as exec from '@actions/exec'
 
 export default class Keychain
 {
+	static GenerateKeychainPath(name: string): string
+	{
+		return `${process.env.HOME}/Library/Keychains/${name}.keychain-db`
+	}
+
+	static GetDefaultLoginKeychain(): string
+	{
+		return this.GenerateKeychainPath('login')
+	}
+
 	static ImportCertificateFromFile(keychain: string, certificate: string, passphrase: string): Promise<number>
 	{
 		const args = [
@@ -65,7 +75,7 @@ export default class Keychain
 		return exec.exec('security', ['delete-keychain', keychain])
 	}
 
-	static SetKeychain(name: string, keychain: string): Promise<number>
+	private static SetKeychain(name: string, keychain: string): Promise<number>
 	{
 		return exec.exec('security', [name, '-d', 'user', '-s', keychain])
 	}

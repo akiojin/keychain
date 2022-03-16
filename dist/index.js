@@ -1295,6 +1295,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const exec = __importStar(__nccwpck_require__(49));
 class Keychain {
+    static GenerateKeychainPath(name) {
+        return `${process.env.HOME}/Library/Keychains/${name}.keychain-db`;
+    }
+    static GetDefaultLoginKeychain() {
+        return this.GenerateKeychainPath('login');
+    }
     static ImportCertificateFromFile(keychain, certificate, passphrase) {
         const args = [
             'import', certificate,
