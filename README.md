@@ -1,4 +1,4 @@
-# keychain-security
+# keychain
 This package uses the security command to manipulate the keychain.
 
 ## Usage
