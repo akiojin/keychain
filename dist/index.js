@@ -1510,11 +1510,19 @@ class Keychain {
                 output += data.toString();
             }
         };
-        await exec.exec('security', builder.Build(), options);
+        try {
+            await exec.exec('security', builder.Build(), options);
+        }
+        catch (err) {
+            return [];
+        }
         let keychains = [];
         if (output !== '') {
             for (const i of output.split('\n')) {
-                keychains.push(i.trim().replace(/"(.*)"/, '$1'));
+                const tmp = i.trim().replace(/"(.*)"/, '$1');
+                if (tmp !== '') {
+                    keychains.push(i.trim().replace(/"(.*)"/, '$1'));
+                }
             }
         }
         return keychains;

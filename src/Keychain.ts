@@ -133,13 +133,20 @@ export default class Keychain
 			}
 		}
 
-		await exec.exec('security', builder.Build(), options)
+		try {
+			await exec.exec('security', builder.Build(), options)
+		} catch (err: any) {
+			return [];
+		}
 
 		let keychains: string[] = []
 
 		if (output !== '') {
 			for (const i of output.split('\n')) {
-				keychains.push(i.trim().replace(/"(.*)"/, '$1'))
+				const tmp = i.trim().replace(/"(.*)"/, '$1')
+				if (tmp !== '') {
+					keychains.push(i.trim().replace(/"(.*)"/, '$1'))
+				}
 			}
 		}
 
