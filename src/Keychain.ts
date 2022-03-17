@@ -6,13 +6,13 @@ export default class Keychain
 {
 	static GenerateKeychainPath(keychain: string): string
 	{
-		return path.dirname(keychain) === '' ?
-			`${process.env.HOME}/Library/Keychains/${keychain}.keychain-db` : keychain
+		const tmp = path.dirname(keychain) === '' ? `${process.env.HOME}/Library/Keychains/${keychain}` : keychain
+		return path.extname(tmp) === '' ? `${tmp}.keychain-db` : tmp
 	}
 
 	static GetDefaultLoginKeychainPath(): string
 	{
-		return this.GenerateKeychainPath('login')
+		return this.GenerateKeychainPath('login.keychain-db')
 	}
 
 	static async CreateKeychain(keychain: string, password: string): Promise<string>
