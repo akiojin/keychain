@@ -2,9 +2,12 @@
 This package uses the security command to manipulate the keychain.
 
 ## Usage
+### Import
 ```js
-import { Keychain } from '@akiojin/keychain'
+import { Keychain, KeychainFile } from '@akiojin/keychain'
 ```
+
+### `Keychain`
 ```js
 const keychain = Keychain.GenerateKeychainPath('test')
 const password = 'ABC0123'
@@ -17,7 +20,21 @@ await Keychain.SetLoginKeychain(keychain)
 await Keychain.SetListKeychain(keychain)
 await Keychain.DeleteKeychain(keychain)
 
-await Keychain.SetDefaultKeychain(Keychain.GetDefaultKeychain())
+await Keychain.SetDefaultKeychain(Keychain.GetDefaultLoginKeychainPath())
+```
+
+### `KeychainFile`
+```js
+const keychain = await Keychain.CreateKeychain('<Keychain name or path>', '<Password>')
+keychain.Lock()
+keychain.Unlock()
+keychain.SetDefault()
+```
+```js
+const keychain = await Keychain.OpenKeychain('<Keychain name or path>')
+keychain.Lock()
+keychain.Unlock('<Password>')
+keychain.SetDefault()
 ```
 
 ## Reference
@@ -38,7 +55,7 @@ This method does not create the keychain, only generates the path.
 |`string`|keychain path|
 
 
-#### `static GetDefaultLoginKeychain(): string`
+#### `static GetDefaultLoginKeychainPath(): string`
 ##### Description
 Returns the path to `login.keychain-db`, which exists by default.
 
