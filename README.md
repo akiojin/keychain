@@ -10,10 +10,9 @@ import { Keychain, KeychainFile } from '@akiojin/keychain'
 ### `Keychain`
 ```js
 const keychain = Keychain.GenerateKeychainPath('test')
-const password = 'ABC0123'
 
-await Keychain.CreateKeychain(keychain, password)
-await Keychain.UnlockKeychain(keychain, password)
+await Keychain.CreateKeychain(keychain, '<Password>')
+await Keychain.UnlockKeychain(keychain, '<Password>')
 await Keychain.SetKeychainTimeout(keychain, 21600)
 await Keychain.SetDefaultKeychain(keychain)
 await Keychain.SetLoginKeychain(keychain)
