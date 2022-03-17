@@ -1,3 +1,5 @@
+import * as path from 'path'
+import * as fs from 'fs/promises'
 import Keychain from './Keychain'
 
 export default class KeychainFile
@@ -5,10 +7,31 @@ export default class KeychainFile
 	#keychain: string = ''
 	#password: string = ''
 
+	static async Open(keychain: string, password?: string): Promise<KeychainFile>
+	{
+		await fs.access(keychain)
+		return new KeychainFile(keychain, password)
+	}
+
 	constructor(keychain: string, password?: string)
 	{
-		this.#keychain = keychain
+		this.#keychain = Keychain.GenerateKeychainPath(keychain)
 		this.#password = password ?? ''
+	}
+
+	GetPath(): string
+	{
+		return this.#keychain
+	}
+
+	GetName()
+	{
+		return path.basename(this.#keychain)
+	}
+
+	SetPassword(password: string): void
+	{
+		this.#password = password
 	}
 
 	async ChangePassword(oldPassword: string, newPassword: string): Promise<number>
@@ -16,7 +39,7 @@ export default class KeychainFile
 		const result = await Keychain.ChangeKeychainPassword(this.#keychain, oldPassword, newPassword)
 
 		if (result === 0) {
-			this.#password = newPassword
+			this.SetPassword(newPassword)
 		}
 
 		return result;
@@ -32,7 +55,7 @@ export default class KeychainFile
 		return Keychain.UnlockKeychain(this.#keychain, password ?? this.#password)
 	}
 
-	SetTimeout(seconds: number)
+	SetTimeout(seconds: number): Promise<number>
 	{
 		return Keychain.SetKeychainTimeout(this.#keychain, seconds)
 	}

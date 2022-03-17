@@ -1,6 +1,10 @@
 export default class KeychainFile {
     #private;
+    static Open(keychain: string, password?: string): Promise<KeychainFile>;
     constructor(keychain: string, password?: string);
+    GetPath(): string;
+    GetName(): string;
+    SetPassword(password: string): void;
     ChangePassword(oldPassword: string, newPassword: string): Promise<number>;
     Lock(): Promise<number>;
     Unlock(password?: string): Promise<number>;

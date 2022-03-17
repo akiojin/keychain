@@ -24,13 +24,15 @@ await Keychain.SetDefaultKeychain(Keychain.GetDefaultLoginKeychainPath())
 
 ### `KeychainFile`
 ```js
-const keychain = await Keychain.CreateKeychain('<Keychain name or path>', '<Password>')
+const keychainPath = await Keychain.CreateKeychain('<Keychain name or path>', '<Password>')
+const keychain = new KeychainFile(keychainPath)
+keychain.SetPassword('<Password>')
 keychain.Lock()
 keychain.Unlock()
 keychain.SetDefault()
 ```
 ```js
-const keychain = await Keychain.OpenKeychain('<Keychain name or path>')
+const keychain = await KeychainFile.Open('<Keychain name or path>')
 keychain.Lock()
 keychain.Unlock('<Password>')
 keychain.SetDefault()
@@ -64,6 +66,23 @@ Returns the path to `login.keychain-db`, which exists by default.
 |`string`|keychain path|
 
 
+#### `static CreateKeychain(keychain: string, password: string): Promise<number>`
+##### Description
+Create a new keychain and set a password.
+Immediately after creation, the keychain is unlocked.
+
+##### Arguments
+|Name|Type|Description|
+|:--|:--|:--|
+|`keychain`|`string`|Path of the keychain. If only the keychain name is specified, it will be placed in `~/Library/Keychains`.|
+|`password`|`string`|Keychain password|
+
+##### Return
+|Type|Description|
+|:--|:--|
+|`number`|Exit code|
+
+
 #### `static ImportCertificateFromFile(keychain: string, certificate: string, passphrase: string): Promise<number>`
 ##### Description
 Import the certificate into the specified keychain.
@@ -75,6 +94,23 @@ The keychain must be unlocked.
 |`keychain`|`string`|Path of the keychain. If no path is specified and only the keychain name is given, it is searched from `~/Library/Keychains/`.|
 |`certificate`|`string`|Certificate Path|
 |`passphrase`|`string`|Certificate passphrase|
+
+##### Return
+|Type|Description|
+|:--|:--|
+|`number`|Exit code|
+
+
+#### `static ChangeKeychainPassword(keychain: string, oldPassword: string, newPassword: string): Promise<number>`
+##### Description
+Change the password set for the keychain.
+
+##### Arguments
+|Name|Type|Description|
+|:--|:--|:--|
+|`keychain`|`string`|Path of the keychain. If only the keychain name is specified, it will be placed in `~/Library/Keychains`.|
+|`oldPassword`|`string`|Old password|
+|`newPassword`|`string`|New password|
 
 ##### Return
 |Type|Description|
@@ -127,23 +163,6 @@ Unlock the default keychain if the keyholder is omitted.
 |`number`|Exit code|
 
 
-#### `static CreateKeychain(keychain: string, password: string): Promise<number>`
-##### Description
-Create a new keychain and set a password.
-Immediately after creation, the keychain is unlocked.
-
-##### Arguments
-|Name|Type|Description|
-|:--|:--|:--|
-|`keychain`|`string`|Path of the keychain. If only the keychain name is specified, it will be placed in `~/Library/Keychains`.|
-|`password`|`string`|Keychain password|
-
-##### Return
-|Type|Description|
-|:--|:--|
-|`number`|Exit code|
-
-
 #### `static SetKeychainTimeout(keychain: string, seconds: number)`
 ##### Description
 Sets the number of timeout seconds before the keychain locks without operation.
@@ -174,6 +193,16 @@ Deletes the specified keychain.
 |Type|Description|
 |:--|:--|
 |`number`|Exit code|
+
+
+#### `static async GetDefaultKeychain(): Promise<string[]>`
+##### Description
+Returns the default keychain.
+
+##### Return
+|Type|Description|
+|:--|:--|
+|`string[]`|Array of keychain paths|
 
 
 #### `static SetDefaultKeychain(keychain: string): Promise<number>`

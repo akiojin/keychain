@@ -1,12 +1,13 @@
 import * as exec from '@actions/exec'
+import * as path from 'path'
 import { ArgumentBuilder } from '@akiojin/argument-builder'
-import { default as KeychainFile } from './KeychainFile'
 
 export default class Keychain
 {
-	static GenerateKeychainPath(name: string): string
+	static GenerateKeychainPath(keychain: string): string
 	{
-		return `${process.env.HOME}/Library/Keychains/${name}.keychain-db`
+		return path.dirname(keychain) === '' ?
+			`${process.env.HOME}/Library/Keychains/${keychain}.keychain-db` : keychain
 	}
 
 	static GetDefaultLoginKeychainPath(): string
@@ -14,11 +15,13 @@ export default class Keychain
 		return this.GenerateKeychainPath('login')
 	}
 
-	static async CreateKeychain(keychain: string, password: string): Promise<KeychainFile>
+	static async CreateKeychain(keychain: string, password: string): Promise<string>
 	{
 		if (password === '') {
 			throw new Error('CreaterKeychain: Password required.')
 		}
+
+		keychain = this.GenerateKeychainPath(keychain)
 
 		const builder = new ArgumentBuilder()
 		builder.Append('create-keychain')
@@ -27,12 +30,7 @@ export default class Keychain
 
 		await exec.exec('security', builder.Build())
 
-		return this.OpenKeychain(keychain)
-	}
-
-	static OpenKeychain(keychain: string, password?: string): KeychainFile
-	{
-		return new KeychainFile(keychain, password)
+		return keychain
 	}
 
 	static ImportCertificateFromFile(keychain: string, certificate: string, passphrase: string): Promise<number>
@@ -49,7 +47,7 @@ export default class Keychain
 		return exec.exec('security', builder.Build())
 	}
 
-	static ChangeKeychainPassword(keychain: string, oldPassword: string, newPassword: string)
+	static ChangeKeychainPassword(keychain: string, oldPassword: string, newPassword: string): Promise<number>
 	{
 		const options: exec.ExecOptions = {
 			input: Buffer.from(`${oldPassword}\n${newPassword}\n${newPassword}`)
@@ -119,6 +117,48 @@ export default class Keychain
 		builder.Append(keychain)
 
 		return exec.exec('security', builder.Build())
+	}
+
+	private static async GetKeychain(name: string): Promise<string[]>
+	{
+		const builder = new ArgumentBuilder()
+		builder.Append(name)
+		builder.Append('-d', 'user')
+
+		let output = ''
+		const options: exec.ExecOptions = {}
+		options.listeners = {
+			stdout: (data: Buffer) => {
+				output += data.toString()
+			}
+		}
+
+		await exec.exec('security', builder.Build(), options)
+
+		let keychains: string[] = []
+
+		if (output !== '') {
+			for (const i of output.split('\n')) {
+				keychains.push(i.trim().replace(/"(.*)"/, '$1'))
+			}
+		}
+
+		return keychains;
+	}
+
+	static async GetDefaultKeychain(): Promise<string[]>
+	{
+		return this.GetKeychain('default-keychain')
+	}
+
+	static async GetLoginKeychain(): Promise<string[]>
+	{
+		return this.GetKeychain('login-keychain')
+	}
+
+	static async GetListKeychain(): Promise<string[]>
+	{
+		return this.GetKeychain('list-keychains')
 	}
 
 	private static SetKeychain(name: string, keychain: string): Promise<number>
