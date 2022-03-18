@@ -145,7 +145,7 @@ export default class Keychain
 			for (const i of output.split('\n')) {
 				const tmp = i.trim().replace(/"(.*)"/, '$1')
 				if (tmp !== '') {
-					keychains.push(i.trim().replace(/"(.*)"/, '$1'))
+					keychains.push(tmp)
 				}
 			}
 		}

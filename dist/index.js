@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 49:
+/***/ 272:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -37,7 +37,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getExecOutput = exports.exec = void 0;
 const string_decoder_1 = __nccwpck_require__(576);
-const tr = __importStar(__nccwpck_require__(469));
+const tr = __importStar(__nccwpck_require__(804));
 /**
  * Exec a command.
  * Output will be streamed to the live console.
@@ -111,7 +111,7 @@ exports.getExecOutput = getExecOutput;
 
 /***/ }),
 
-/***/ 469:
+/***/ 804:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -150,8 +150,8 @@ const os = __importStar(__nccwpck_require__(37));
 const events = __importStar(__nccwpck_require__(361));
 const child = __importStar(__nccwpck_require__(81));
 const path = __importStar(__nccwpck_require__(17));
-const io = __importStar(__nccwpck_require__(864));
-const ioUtil = __importStar(__nccwpck_require__(887));
+const io = __importStar(__nccwpck_require__(541));
+const ioUtil = __importStar(__nccwpck_require__(417));
 const timers_1 = __nccwpck_require__(512);
 /* eslint-disable @typescript-eslint/unbound-method */
 const IS_WINDOWS = process.platform === 'win32';
@@ -736,7 +736,7 @@ class ExecState extends events.EventEmitter {
 
 /***/ }),
 
-/***/ 887:
+/***/ 417:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -920,7 +920,7 @@ exports.getCmdPath = getCmdPath;
 
 /***/ }),
 
-/***/ 864:
+/***/ 541:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -959,7 +959,7 @@ const assert_1 = __nccwpck_require__(491);
 const childProcess = __importStar(__nccwpck_require__(81));
 const path = __importStar(__nccwpck_require__(17));
 const util_1 = __nccwpck_require__(837);
-const ioUtil = __importStar(__nccwpck_require__(887));
+const ioUtil = __importStar(__nccwpck_require__(417));
 const exec = util_1.promisify(childProcess.exec);
 const execFile = util_1.promisify(childProcess.execFile);
 /**
@@ -1268,7 +1268,7 @@ function copyFile(srcFile, destFile, force) {
 
 /***/ }),
 
-/***/ 582:
+/***/ 883:
 /***/ ((module) => {
 
 /******/ (() => { // webpackBootstrap
@@ -1388,7 +1388,7 @@ Object.defineProperty(exports, "ArgumentBuilder", ({ enumerable: true, get: func
 
 /***/ }),
 
-/***/ 577:
+/***/ 488:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1417,9 +1417,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const exec = __importStar(__nccwpck_require__(49));
+const exec = __importStar(__nccwpck_require__(272));
 const path = __importStar(__nccwpck_require__(17));
-const argument_builder_1 = __nccwpck_require__(582);
+const argument_builder_1 = __nccwpck_require__(883);
 class Keychain {
     static GenerateKeychainPath(keychain) {
         const tmp = path.dirname(keychain) === '' ? `${process.env.HOME}/Library/Keychains/${keychain}` : keychain;
@@ -1521,7 +1521,7 @@ class Keychain {
             for (const i of output.split('\n')) {
                 const tmp = i.trim().replace(/"(.*)"/, '$1');
                 if (tmp !== '') {
-                    keychains.push(i.trim().replace(/"(.*)"/, '$1'));
+                    keychains.push(tmp);
                 }
             }
         }
@@ -1610,7 +1610,7 @@ exports["default"] = Keychain;
 
 /***/ }),
 
-/***/ 220:
+/***/ 299:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1656,7 +1656,7 @@ var _KeychainFile_keychain, _KeychainFile_password;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const path = __importStar(__nccwpck_require__(17));
 const fs = __importStar(__nccwpck_require__(292));
-const Keychain_1 = __importDefault(__nccwpck_require__(577));
+const Keychain_1 = __importDefault(__nccwpck_require__(488));
 class KeychainFile {
     constructor(keychain, password) {
         _KeychainFile_keychain.set(this, '');
@@ -1721,7 +1721,7 @@ _KeychainFile_keychain = new WeakMap(), _KeychainFile_password = new WeakMap();
 
 /***/ }),
 
-/***/ 925:
+/***/ 264:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1731,9 +1731,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KeychainFile = exports.Keychain = void 0;
-var Keychain_1 = __nccwpck_require__(577);
+var Keychain_1 = __nccwpck_require__(488);
 Object.defineProperty(exports, "Keychain", ({ enumerable: true, get: function () { return __importDefault(Keychain_1).default; } }));
-var KeychainFile_1 = __nccwpck_require__(220);
+var KeychainFile_1 = __nccwpck_require__(299);
 Object.defineProperty(exports, "KeychainFile", ({ enumerable: true, get: function () { return __importDefault(KeychainFile_1).default; } }));
 
 
@@ -1861,7 +1861,7 @@ module.exports = require("util");
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(925);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(264);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
