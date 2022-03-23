@@ -6,8 +6,8 @@ export default class Keychain
 {
 	static GenerateKeychainPath(keychain: string): string
 	{
-		const tmp = path.dirname(keychain) === '' ? `${process.env.HOME}/Library/Keychains/${keychain}` : keychain
-		return path.extname(tmp) === '' ? `${tmp}.keychain-db` : tmp
+		const tmp = !path.dirname(keychain) ? `${process.env.HOME}/Library/Keychains/${keychain}` : keychain
+		return !path.extname(tmp) ? `${tmp}.keychain-db` : tmp
 	}
 
 	static GetDefaultLoginKeychainPath(): string
@@ -17,16 +17,16 @@ export default class Keychain
 
 	static async CreateKeychain(keychain: string, password: string): Promise<string>
 	{
-		if (password === '') {
+		if (!password) {
 			throw new Error('CreaterKeychain: Password required.')
 		}
 
 		keychain = this.GenerateKeychainPath(keychain)
 
 		const builder = new ArgumentBuilder()
-		builder.Append('create-keychain')
-		builder.Append('-p', password)
-		builder.Append(keychain)
+			.Append('create-keychain')
+			.Append('-p', password)
+			.Append(keychain)
 
 		await exec.exec('security', builder.Build())
 
@@ -36,13 +36,13 @@ export default class Keychain
 	static ImportCertificateFromFile(keychain: string, certificate: string, passphrase: string): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('import', certificate)
-		builder.Append('-k', keychain)
-		builder.Append('-P', passphrase)
-		builder.Append('-f', 'pkcs12')
-		builder.Append('-A')
-		builder.Append('-T', '/usr/bin/codesign')
-		builder.Append('-T', '/usr/bin/security')
+			.Append('import', certificate)
+			.Append('-k', keychain)
+			.Append('-P', passphrase)
+			.Append('-f', 'pkcs12')
+			.Append('-A')
+			.Append('-T', '/usr/bin/codesign')
+			.Append('-T', '/usr/bin/security')
 
 		return exec.exec('security', builder.Build())
 	}
@@ -54,8 +54,8 @@ export default class Keychain
 		}
 
 		const builder = new ArgumentBuilder()
-		builder.Append('set-keychain-password')
-		builder.Append(keychain)
+			.Append('set-keychain-password')
+			.Append(keychain)
 
 		return exec.exec('security', builder.Build(), options)
 	}
@@ -63,7 +63,7 @@ export default class Keychain
 	static LockKeychain(keychain?: string): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('lock-keychain')
+			.Append('lock-keychain')
 
 		if (keychain != null) {
 			builder.Append(keychain)
@@ -75,8 +75,8 @@ export default class Keychain
 	static LockKeychainAll(): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('lock-keychain')
-		builder.Append('-a')
+			.Append('lock-keychain')
+			.Append('-a')
 
 		return exec.exec('security', builder.Build())
 	}
@@ -90,8 +90,8 @@ export default class Keychain
 		}
 
 		const builder = new ArgumentBuilder()
-		builder.Append('unlock-keychain')
-		builder.Append('-p', password)
+			.Append('unlock-keychain')
+			.Append('-p', password)
 
 		if (keychain != null) {
 			builder.Append(keychain)
@@ -103,9 +103,9 @@ export default class Keychain
 	static SetKeychainTimeout(keychain: string, seconds: number)
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('set-keychain-settings')
-		builder.Append('-lut', seconds.toString())
-		builder.Append(keychain)
+			.Append('set-keychain-settings')
+			.Append('-lut', seconds.toString())
+			.Append(keychain)
 
 		return exec.exec('security', builder.Build())
 	}
@@ -113,8 +113,8 @@ export default class Keychain
 	static DeleteKeychain(keychain: string): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('delete-keychain')
-		builder.Append(keychain)
+			.Append('delete-keychain')
+			.Append(keychain)
 
 		return exec.exec('security', builder.Build())
 	}
@@ -122,8 +122,8 @@ export default class Keychain
 	private static async GetKeychain(name: string): Promise<string[]>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append(name)
-		builder.Append('-d', 'user')
+			.Append(name)
+			.Append('-d', 'user')
 
 		let output = ''
 		const options: exec.ExecOptions = {}
@@ -141,10 +141,10 @@ export default class Keychain
 
 		let keychains: string[] = []
 
-		if (output !== '') {
+		if (!!output) {
 			for (const i of output.split('\n')) {
 				const tmp = i.trim().replace(/"(.*)"/, '$1')
-				if (tmp !== '') {
+				if (!!tmp) {
 					keychains.push(i.trim().replace(/"(.*)"/, '$1'))
 				}
 			}
@@ -171,9 +171,9 @@ export default class Keychain
 	private static SetKeychain(name: string, keychain: string): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append(name)
-		builder.Append('-d', 'user')
-		builder.Append('-s', keychain)
+			.Append(name)
+			.Append('-d', 'user')
+			.Append('-s', keychain)
 
 		return exec.exec('security', builder.Build())
 	}
@@ -196,7 +196,7 @@ export default class Keychain
 	static ShowLoginKeychain(): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('login-keychain')
+			.Append('login-keychain')
 
 		return exec.exec('security', builder.Build())
 	}
@@ -204,8 +204,8 @@ export default class Keychain
 	static ShowListKeychains(): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('list-keychains')
-		builder.Append('-d', 'user')
+			.Append('list-keychains')
+			.Append('-d', 'user')
 
 		return exec.exec('security', builder.Build())
 	}
@@ -213,9 +213,9 @@ export default class Keychain
 	static SetListKeychain(keychain: string): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('list-keychains')
-		builder.Append('-d', 'user')
-		builder.Append('-s', keychain)
+			.Append('list-keychains')
+			.Append('-d', 'user')
+			.Append('-s', keychain)
 
 		return exec.exec('security', builder.Build())
 	}
@@ -223,10 +223,10 @@ export default class Keychain
 	static SetListKeychains(keychains: string[]): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('list-keychains')
-		builder.Append('-d', 'user')
-		builder.Append('-s')
-		builder.Append(keychains)
+			.Append('list-keychains')
+			.Append('-d', 'user')
+			.Append('-s')
+			.Append(keychains)
 
 		return exec.exec('security', builder.Build())
 	}
@@ -234,11 +234,11 @@ export default class Keychain
 	static AllowAccessForAppleTools(keychain: string, password: string): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('set-key-partition-list')
-		builder.Append('-S', 'apple-tool:,apple:')
-		builder.Append('-s')
-		builder.Append('-k', password)
-		builder.Append(keychain)
+			.Append('set-key-partition-list')
+			.Append('-S', 'apple-tool:,apple:')
+			.Append('-s')
+			.Append('-k', password)
+			.Append(keychain)
 
 		return exec.exec('security', builder.Build())
 	}
@@ -248,8 +248,8 @@ export default class Keychain
 	static FindGenericPassword(service: string, keychain?: string): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('find-generic-password')
-		builder.Append('-s', `"${service}"`)
+			.Append('find-generic-password')
+			.Append('-s', `"${service}"`)
 
 		if (keychain != null) {
 			builder.Append(keychain)
@@ -261,10 +261,10 @@ export default class Keychain
 	static ShowCodeSigning(keychain: string): Promise<number>
 	{
 		const builder = new ArgumentBuilder()
-		builder.Append('find-identity')
-		builder.Append('-p')
-		builder.Append('codesigning')
-		builder.Append('-v', keychain)
+			.Append('find-identity')
+			.Append('-p')
+			.Append('codesigning')
+			.Append('-v', keychain)
 
 		return exec.exec('security', builder.Build())
 	}

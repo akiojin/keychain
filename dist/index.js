@@ -1306,6 +1306,7 @@ class ArgumentBuilder {
                 __classPrivateFieldGet(this, _ArgumentBuilder_args, "f").push(param);
             }
         }
+        return this;
     }
     Count() {
         return __classPrivateFieldGet(this, _ArgumentBuilder_args, "f").length;
@@ -1422,87 +1423,87 @@ const path = __importStar(__nccwpck_require__(17));
 const argument_builder_1 = __nccwpck_require__(582);
 class Keychain {
     static GenerateKeychainPath(keychain) {
-        const tmp = path.dirname(keychain) === '' ? `${process.env.HOME}/Library/Keychains/${keychain}` : keychain;
-        return path.extname(tmp) === '' ? `${tmp}.keychain-db` : tmp;
+        const tmp = !path.dirname(keychain) ? `${process.env.HOME}/Library/Keychains/${keychain}` : keychain;
+        return !path.extname(tmp) ? `${tmp}.keychain-db` : tmp;
     }
     static GetDefaultLoginKeychainPath() {
         return this.GenerateKeychainPath('login.keychain-db');
     }
     static async CreateKeychain(keychain, password) {
-        if (password === '') {
+        if (!password) {
             throw new Error('CreaterKeychain: Password required.');
         }
         keychain = this.GenerateKeychainPath(keychain);
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('create-keychain');
-        builder.Append('-p', password);
-        builder.Append(keychain);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('create-keychain')
+            .Append('-p', password)
+            .Append(keychain);
         await exec.exec('security', builder.Build());
         return keychain;
     }
     static ImportCertificateFromFile(keychain, certificate, passphrase) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('import', certificate);
-        builder.Append('-k', keychain);
-        builder.Append('-P', passphrase);
-        builder.Append('-f', 'pkcs12');
-        builder.Append('-A');
-        builder.Append('-T', '/usr/bin/codesign');
-        builder.Append('-T', '/usr/bin/security');
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('import', certificate)
+            .Append('-k', keychain)
+            .Append('-P', passphrase)
+            .Append('-f', 'pkcs12')
+            .Append('-A')
+            .Append('-T', '/usr/bin/codesign')
+            .Append('-T', '/usr/bin/security');
         return exec.exec('security', builder.Build());
     }
     static ChangeKeychainPassword(keychain, oldPassword, newPassword) {
         const options = {
             input: Buffer.from(`${oldPassword}\n${newPassword}\n${newPassword}`)
         };
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('set-keychain-password');
-        builder.Append(keychain);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('set-keychain-password')
+            .Append(keychain);
         return exec.exec('security', builder.Build(), options);
     }
     static LockKeychain(keychain) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('lock-keychain');
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('lock-keychain');
         if (keychain != null) {
             builder.Append(keychain);
         }
         return exec.exec('security', builder.Build());
     }
     static LockKeychainAll() {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('lock-keychain');
-        builder.Append('-a');
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('lock-keychain')
+            .Append('-a');
         return exec.exec('security', builder.Build());
     }
     static UnlockKeychain(keychain, password) {
         if (password == null) {
             throw new Error('UnlockKeychain: Password required.');
         }
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('unlock-keychain');
-        builder.Append('-p', password);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('unlock-keychain')
+            .Append('-p', password);
         if (keychain != null) {
             builder.Append(keychain);
         }
         return exec.exec('security', builder.Build());
     }
     static SetKeychainTimeout(keychain, seconds) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('set-keychain-settings');
-        builder.Append('-lut', seconds.toString());
-        builder.Append(keychain);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('set-keychain-settings')
+            .Append('-lut', seconds.toString())
+            .Append(keychain);
         return exec.exec('security', builder.Build());
     }
     static DeleteKeychain(keychain) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('delete-keychain');
-        builder.Append(keychain);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('delete-keychain')
+            .Append(keychain);
         return exec.exec('security', builder.Build());
     }
     static async GetKeychain(name) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append(name);
-        builder.Append('-d', 'user');
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append(name)
+            .Append('-d', 'user');
         let output = '';
         const options = {};
         options.listeners = {
@@ -1517,10 +1518,10 @@ class Keychain {
             return [];
         }
         let keychains = [];
-        if (output !== '') {
+        if (!!output) {
             for (const i of output.split('\n')) {
                 const tmp = i.trim().replace(/"(.*)"/, '$1');
-                if (tmp !== '') {
+                if (!!tmp) {
                     keychains.push(i.trim().replace(/"(.*)"/, '$1'));
                 }
             }
@@ -1537,10 +1538,10 @@ class Keychain {
         return this.GetKeychain('list-keychains');
     }
     static SetKeychain(name, keychain) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append(name);
-        builder.Append('-d', 'user');
-        builder.Append('-s', keychain);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append(name)
+            .Append('-d', 'user')
+            .Append('-s', keychain);
         return exec.exec('security', builder.Build());
     }
     static SetDefaultKeychain(keychain) {
@@ -1553,55 +1554,55 @@ class Keychain {
         return this.SetKeychain('login-keychain', keychain);
     }
     static ShowLoginKeychain() {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('login-keychain');
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('login-keychain');
         return exec.exec('security', builder.Build());
     }
     static ShowListKeychains() {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('list-keychains');
-        builder.Append('-d', 'user');
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('list-keychains')
+            .Append('-d', 'user');
         return exec.exec('security', builder.Build());
     }
     static SetListKeychain(keychain) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('list-keychains');
-        builder.Append('-d', 'user');
-        builder.Append('-s', keychain);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('list-keychains')
+            .Append('-d', 'user')
+            .Append('-s', keychain);
         return exec.exec('security', builder.Build());
     }
     static SetListKeychains(keychains) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('list-keychains');
-        builder.Append('-d', 'user');
-        builder.Append('-s');
-        builder.Append(keychains);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('list-keychains')
+            .Append('-d', 'user')
+            .Append('-s')
+            .Append(keychains);
         return exec.exec('security', builder.Build());
     }
     static AllowAccessForAppleTools(keychain, password) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('set-key-partition-list');
-        builder.Append('-S', 'apple-tool:,apple:');
-        builder.Append('-s');
-        builder.Append('-k', password);
-        builder.Append(keychain);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('set-key-partition-list')
+            .Append('-S', 'apple-tool:,apple:')
+            .Append('-s')
+            .Append('-k', password)
+            .Append(keychain);
         return exec.exec('security', builder.Build());
     }
     static FindGenericPassword(service, keychain) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('find-generic-password');
-        builder.Append('-s', `"${service}"`);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('find-generic-password')
+            .Append('-s', `"${service}"`);
         if (keychain != null) {
             builder.Append(keychain);
         }
         return exec.exec('security', builder.Build());
     }
     static ShowCodeSigning(keychain) {
-        const builder = new argument_builder_1.ArgumentBuilder();
-        builder.Append('find-identity');
-        builder.Append('-p');
-        builder.Append('codesigning');
-        builder.Append('-v', keychain);
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('find-identity')
+            .Append('-p')
+            .Append('codesigning')
+            .Append('-v', keychain);
         return exec.exec('security', builder.Build());
     }
 }
