@@ -136,7 +136,7 @@ export default class Keychain
 		try {
 			await exec.exec('security', builder.Build(), options)
 		} catch (err: any) {
-			return [];
+			return []
 		}
 
 		let keychains: string[] = []
