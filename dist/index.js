@@ -1605,6 +1605,12 @@ class Keychain {
             .Append('-v');
         return exec.exec('security', builder.Build());
     }
+    static async DeleteCodeSigning(hash) {
+        const builder = new argument_builder_1.ArgumentBuilder()
+            .Append('delete-identity')
+            .Append('-Z', hash);
+        await exec.exec('security', builder.Build());
+    }
     static async GetCodeSigning() {
         const builder = new argument_builder_1.ArgumentBuilder()
             .Append('find-identity')
