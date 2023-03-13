@@ -26,4 +26,5 @@ export default class Keychain {
     static FindGenericPassword(service: string): Promise<number>;
     static FindGenericPassword(service: string, keychain: string): Promise<number>;
     static ShowCodeSigning(keychain: string): Promise<number>;
+    static GetCodeSigning(keychain: string): Promise<string>;
 }

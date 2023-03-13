@@ -268,4 +268,30 @@ export default class Keychain
 
 		return exec.exec('security', builder.Build())
 	}
+
+
+    static async GetCodeSigning(keychain: string): Promise<string>
+    {
+        const builder = new ArgumentBuilder()
+            .Append('find-identity')
+            .Append('-p')
+            .Append('codesigning')
+            .Append('-v', keychain)
+
+        let output = ''
+        const options: exec.ExecOptions = {}
+        options.listeners = {
+            stdout: (data: Buffer) => {
+                output += data.toString()
+            }
+        }
+
+        try {
+            await exec.exec('security', builder.Build(), options)
+        } catch (err: any) {
+            return ''
+        }
+
+        return output
+    }
 }
