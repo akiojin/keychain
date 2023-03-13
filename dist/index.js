@@ -1597,20 +1597,20 @@ class Keychain {
         }
         return exec.exec('security', builder.Build());
     }
-    static ShowCodeSigning(keychain) {
+    static ShowCodeSigning() {
         const builder = new argument_builder_1.ArgumentBuilder()
             .Append('find-identity')
             .Append('-p')
             .Append('codesigning')
-            .Append('-v', keychain);
+            .Append('-v');
         return exec.exec('security', builder.Build());
     }
-    static async GetCodeSigning(keychain) {
+    static async GetCodeSigning() {
         const builder = new argument_builder_1.ArgumentBuilder()
             .Append('find-identity')
             .Append('-p')
             .Append('codesigning')
-            .Append('-v', keychain);
+            .Append('-v');
         let output = '';
         const options = {};
         options.listeners = {
@@ -1734,7 +1734,7 @@ class KeychainFile {
         return Keychain_1.default.FindGenericPassword(service, __classPrivateFieldGet(this, _KeychainFile_keychain, "f"));
     }
     ShowCodeSigning() {
-        return Keychain_1.default.ShowCodeSigning(__classPrivateFieldGet(this, _KeychainFile_keychain, "f"));
+        return Keychain_1.default.ShowCodeSigning();
     }
 }
 exports["default"] = KeychainFile;

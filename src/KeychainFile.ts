@@ -92,6 +92,6 @@ export default class KeychainFile
 
 	ShowCodeSigning(): Promise<number>
 	{
-		return Keychain.ShowCodeSigning(this.#keychain)
+		return Keychain.ShowCodeSigning()
 	}
 }
