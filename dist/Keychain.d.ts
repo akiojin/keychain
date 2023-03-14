@@ -1,5 +1,6 @@
 export interface CodeSigning {
     Hash: string;
+    Target: string;
     Type: string;
     Publisher: string;
     IssuerID: string;

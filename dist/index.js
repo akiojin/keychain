@@ -1626,11 +1626,12 @@ class Keychain {
         };
         try {
             await exec.exec('security', builder.Build(), options);
-            const regex = /\s*\d\)\s(?<Hash>\w*)\s"[Apple|iPhone]*\s(?<Type>.*):\s(?<Publisher>.*)\s\((?<IssuerID>\w*)\)"/g;
+            const regex = /\s*\d\)\s(?<Hash>\w*)\s"(?<Target>[Apple|iPhone]*)\s(?<Type>.*):\s(?<Publisher>.*)\s\((?<IssuerID>\w*)\)"/g;
             return Array.from(output.matchAll(regex), match => match.groups)
                 .map(match => {
                 return {
                     Hash: match['Hash'],
+                    Target: match['Target'],
                     Type: match['Type'],
                     Publisher: match['Publisher'],
                     IssuerID: match['IssuerID'],
