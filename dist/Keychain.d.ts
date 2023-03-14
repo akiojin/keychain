@@ -1,3 +1,9 @@
+export interface CodeSigning {
+    Hash: string;
+    Type: string;
+    Publisher: string;
+    IssuerID: string;
+}
 export default class Keychain {
     static GenerateKeychainPath(keychain: string): string;
     static GetDefaultLoginKeychainPath(): string;
@@ -27,5 +33,5 @@ export default class Keychain {
     static FindGenericPassword(service: string, keychain: string): Promise<number>;
     static ShowCodeSigning(): Promise<number>;
     static DeleteCodeSigning(hash: string): Promise<void>;
-    static GetCodeSigning(): Promise<string>;
+    static GetCodeSigning(): Promise<CodeSigning[]>;
 }
