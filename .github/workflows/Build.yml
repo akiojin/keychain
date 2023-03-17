@@ -4,7 +4,7 @@ on: push
 
 jobs:
   Build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
@@ -12,5 +12,4 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm install
-      - run: npx @vercel/ncc build src/index.ts
+      - run: npm run build
