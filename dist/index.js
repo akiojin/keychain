@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 13:
+/***/ 514:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -37,7 +37,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getExecOutput = exports.exec = void 0;
 const string_decoder_1 = __nccwpck_require__(576);
-const tr = __importStar(__nccwpck_require__(962));
+const tr = __importStar(__nccwpck_require__(159));
 /**
  * Exec a command.
  * Output will be streamed to the live console.
@@ -111,7 +111,7 @@ exports.getExecOutput = getExecOutput;
 
 /***/ }),
 
-/***/ 962:
+/***/ 159:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -150,8 +150,8 @@ const os = __importStar(__nccwpck_require__(37));
 const events = __importStar(__nccwpck_require__(361));
 const child = __importStar(__nccwpck_require__(81));
 const path = __importStar(__nccwpck_require__(17));
-const io = __importStar(__nccwpck_require__(957));
-const ioUtil = __importStar(__nccwpck_require__(251));
+const io = __importStar(__nccwpck_require__(351));
+const ioUtil = __importStar(__nccwpck_require__(962));
 const timers_1 = __nccwpck_require__(512);
 /* eslint-disable @typescript-eslint/unbound-method */
 const IS_WINDOWS = process.platform === 'win32';
@@ -736,7 +736,7 @@ class ExecState extends events.EventEmitter {
 
 /***/ }),
 
-/***/ 251:
+/***/ 962:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -920,7 +920,7 @@ exports.getCmdPath = getCmdPath;
 
 /***/ }),
 
-/***/ 957:
+/***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -959,7 +959,7 @@ const assert_1 = __nccwpck_require__(491);
 const childProcess = __importStar(__nccwpck_require__(81));
 const path = __importStar(__nccwpck_require__(17));
 const util_1 = __nccwpck_require__(837);
-const ioUtil = __importStar(__nccwpck_require__(251));
+const ioUtil = __importStar(__nccwpck_require__(962));
 const exec = util_1.promisify(childProcess.exec);
 const execFile = util_1.promisify(childProcess.execFile);
 /**
@@ -1268,7 +1268,7 @@ function copyFile(srcFile, destFile, force) {
 
 /***/ }),
 
-/***/ 531:
+/***/ 782:
 /***/ ((module) => {
 
 /******/ (() => { // webpackBootstrap
@@ -1389,7 +1389,7 @@ Object.defineProperty(exports, "ArgumentBuilder", ({ enumerable: true, get: func
 
 /***/ }),
 
-/***/ 523:
+/***/ 990:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1418,9 +1418,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const exec = __importStar(__nccwpck_require__(13));
+const exec = __importStar(__nccwpck_require__(514));
 const path = __importStar(__nccwpck_require__(17));
-const argument_builder_1 = __nccwpck_require__(531);
+const argument_builder_1 = __nccwpck_require__(782);
 class Keychain {
     static GenerateKeychainPath(keychain) {
         const tmp = !path.dirname(keychain) ? `${process.env.HOME}/Library/Keychains/${keychain}` : keychain;
@@ -1648,7 +1648,7 @@ exports["default"] = Keychain;
 
 /***/ }),
 
-/***/ 524:
+/***/ 832:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1694,17 +1694,17 @@ var _KeychainFile_keychain, _KeychainFile_password;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const path = __importStar(__nccwpck_require__(17));
 const fs = __importStar(__nccwpck_require__(292));
-const Keychain_1 = __importDefault(__nccwpck_require__(523));
+const Keychain_1 = __importDefault(__nccwpck_require__(990));
 class KeychainFile {
+    static async Open(keychain, password) {
+        await fs.access(keychain);
+        return new KeychainFile(keychain, password);
+    }
     constructor(keychain, password) {
         _KeychainFile_keychain.set(this, '');
         _KeychainFile_password.set(this, '');
         __classPrivateFieldSet(this, _KeychainFile_keychain, Keychain_1.default.GenerateKeychainPath(keychain), "f");
-        __classPrivateFieldSet(this, _KeychainFile_password, password !== null && password !== void 0 ? password : '', "f");
-    }
-    static async Open(keychain, password) {
-        await fs.access(keychain);
-        return new KeychainFile(keychain, password);
+        __classPrivateFieldSet(this, _KeychainFile_password, password ?? '', "f");
     }
     GetPath() {
         return __classPrivateFieldGet(this, _KeychainFile_keychain, "f");
@@ -1726,7 +1726,7 @@ class KeychainFile {
         return Keychain_1.default.LockKeychain(__classPrivateFieldGet(this, _KeychainFile_keychain, "f"));
     }
     Unlock(password) {
-        return Keychain_1.default.UnlockKeychain(__classPrivateFieldGet(this, _KeychainFile_keychain, "f"), password !== null && password !== void 0 ? password : __classPrivateFieldGet(this, _KeychainFile_password, "f"));
+        return Keychain_1.default.UnlockKeychain(__classPrivateFieldGet(this, _KeychainFile_keychain, "f"), password ?? __classPrivateFieldGet(this, _KeychainFile_password, "f"));
     }
     SetTimeout(seconds) {
         return Keychain_1.default.SetKeychainTimeout(__classPrivateFieldGet(this, _KeychainFile_keychain, "f"), seconds);
@@ -1744,7 +1744,7 @@ class KeychainFile {
         return Keychain_1.default.ImportCertificateFromFile(__classPrivateFieldGet(this, _KeychainFile_keychain, "f"), certificate, passphrase);
     }
     AllowAccessForAppleTools(password) {
-        return Keychain_1.default.AllowAccessForAppleTools(__classPrivateFieldGet(this, _KeychainFile_keychain, "f"), password !== null && password !== void 0 ? password : __classPrivateFieldGet(this, _KeychainFile_password, "f"));
+        return Keychain_1.default.AllowAccessForAppleTools(__classPrivateFieldGet(this, _KeychainFile_keychain, "f"), password ?? __classPrivateFieldGet(this, _KeychainFile_password, "f"));
     }
     FindGenericPassword(service) {
         return Keychain_1.default.FindGenericPassword(service, __classPrivateFieldGet(this, _KeychainFile_keychain, "f"));
@@ -1759,7 +1759,7 @@ _KeychainFile_keychain = new WeakMap(), _KeychainFile_password = new WeakMap();
 
 /***/ }),
 
-/***/ 342:
+/***/ 144:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1769,9 +1769,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KeychainFile = exports.Keychain = void 0;
-var Keychain_1 = __nccwpck_require__(523);
+var Keychain_1 = __nccwpck_require__(990);
 Object.defineProperty(exports, "Keychain", ({ enumerable: true, get: function () { return __importDefault(Keychain_1).default; } }));
-var KeychainFile_1 = __nccwpck_require__(524);
+var KeychainFile_1 = __nccwpck_require__(832);
 Object.defineProperty(exports, "KeychainFile", ({ enumerable: true, get: function () { return __importDefault(KeychainFile_1).default; } }));
 
 
@@ -1899,7 +1899,7 @@ module.exports = require("util");
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(342);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(144);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
