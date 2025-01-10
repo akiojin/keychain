@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Release:
+    runs-on:
+      - ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+
+    steps:
+      - name: 🔄 Checkout to the branch
+        uses: actions/checkout@v4
+
+      - name: 🚀 GitHub Release
+        uses: akiojin/github-release-github-action@v1
+        with:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: 🚀 npm publish
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
