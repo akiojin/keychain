@@ -1,6 +1,9 @@
 name: Build
 
-on: push
+on:
+  push:
+    branches-ignore:
+      - main
 
 jobs:
   Build:
@@ -10,5 +13,9 @@ jobs:
     steps:
       - name: 🔄 Checkout to the branch
         uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npm run build
+
+      - name: 🍏 Set up Node.js version
+        uses: actions/setup-node@v4
+
+      - name: ⚙️ npm install and build
+        run: npm run build
