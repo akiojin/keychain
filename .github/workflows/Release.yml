@@ -17,4 +17,4 @@ jobs:
         uses: actions/checkout@v4
       - run: gh release create ${{ github.ref_name }} --generate-notes
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
